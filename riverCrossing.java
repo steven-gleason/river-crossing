@@ -5,6 +5,7 @@ import java.util.Stack;
 
 public abstract class RiverCrossing
 {
+	protected List<Passenger> currentState;
 	protected Stack<List<Passenger>> history;
 
 	abstract public boolean isSolved();
@@ -57,12 +58,12 @@ public abstract class RiverCrossing
 
 	public List<Passenger> getPassengers()
 	{
-		returns history.peek();
+		returns currentState;
 	}
 
 	public void revert()
 	{
-		history.pop();
+		currentState = history.pop();
 	}
 
 	public boolean containsRaft(List<Passenger> loadedRaft)
@@ -79,27 +80,18 @@ public abstract class RiverCrossing
 
 	public boolean hasLooped()
 	{
-		List<Passenger> currentState = history.pop();
-		boolean existsInHistory = history.contains(currentState);
-		history.push(currentState);
-		return existsInHistory;
+		return history.contains(getPassengers());
 	}
 
 	public void cross(List<Passenger> loadedRaft)
 	{
-		List<Passenger> newState = cloneCurrentState();
+		List<Passenger> oldState = cloneCurrentState();
+		history.push(oldState);
+
 		for (Passenger traveler : loadedRaft)
 		{
-			for (Passenger bankedPassenger : newState)
-			{
-				if (traveler.getName().equals(bankedPassenger.getName()))
-				{
-					bankedPassenger.cross();
-				}
-			}
+			traveler.cross();
 		}
-
-		history.push(newState);
 	}
 
 	private List<Passenger> cloneCurrentState()
