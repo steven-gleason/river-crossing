@@ -1,4 +1,4 @@
-package rivercrossing
+package rivercrossing;
 
 public abstract class Passenger
 {
