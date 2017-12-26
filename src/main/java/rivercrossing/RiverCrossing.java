@@ -19,7 +19,7 @@ public abstract class RiverCrossing
 	public void nextMove()
 	{
 		Passenger raft = getRaft();
-		boolean direction = raft.isCrossed();
+		boolean direction = raft.hasCrossed();
 
 		for (Passenger p1 : getPassengers())
 		{
@@ -56,6 +56,25 @@ public abstract class RiverCrossing
 		}
 	}
 
+	public void endGame()
+	{
+		System.println("Game Solved");
+		System.println(currentStateString());
+		while (!history.isEmpty())
+		{
+			revert();
+			System.println(currentStateString());
+		}
+	}
+
+	public String currentStateString()
+	{
+		for (Passenger p : getPassengers())
+		{
+			String result = p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
+		}
+		return result;
+	}
 	public List<Passenger> getPassengers()
 	{
 		returns currentState;
