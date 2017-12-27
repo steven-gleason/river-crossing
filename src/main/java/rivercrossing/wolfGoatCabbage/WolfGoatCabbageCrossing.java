@@ -1,11 +1,11 @@
-package rivercrossing.wolfGoatCabage;
+package rivercrossing.wolfGoatCabbage;
 
 import java.util.List;
 import rivercrossing.Passenger;
 import rivercrossing.Raft;
 import rivercrossing.RiverCrossing;
 
-public class WolfGoatCabageCrossing extends RiverCrossing
+public class WolfGoatCabbageCrossing extends RiverCrossing
 {
 
 	private static final String WOLF = "wolf";
@@ -15,13 +15,13 @@ public class WolfGoatCabageCrossing extends RiverCrossing
 
 	public void main(String[] argz)
 	{
-		WolfGoatCabageCrossing wgc = new WolfGoatCabageCrossing();
+		WolfGoatCabbageCrossing wgc = new WolfGoatCabbageCrossing();
 		wgc.nextMove();
 		System.out.println("no solution");
 	}
 
 
-	public WolfGoatCabageCrossing()
+	public WolfGoatCabbageCrossing()
 	{
 		super();
 		Passenger wolf = new Passenger(WOLF);
