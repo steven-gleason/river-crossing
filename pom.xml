@@ -3,4 +3,26 @@
 	<groupId>rivercrossing</groupId>
 	<artifactId>rivercrossing</artifactId>
 	<version>0</version>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>rivercrossing.wolfGoatCabbage.WolfGoatCabbageCrossing</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	</dependencies>
 </project>

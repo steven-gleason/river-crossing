@@ -1,0 +1,2 @@
+mvn install package assembly:single
+java -jar target/rivercrossing-0-jar-with-dependencies.jar

@@ -13,7 +13,7 @@ public class WolfGoatCabbageCrossing extends RiverCrossing
 	private static final String CABBAGE = "cabbage";
 	private static final String FARMER = "farmer";
 
-	public void main(String[] argz)
+	public static void main(String[] args)
 	{
 		WolfGoatCabbageCrossing wgc = new WolfGoatCabbageCrossing();
 		wgc.nextMove();
