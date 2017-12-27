@@ -123,7 +123,33 @@ public abstract class RiverCrossing
 
 	public boolean hasLooped()
 	{
-		return history.contains(getPassengers());
+		for (List<Passenger> state : history)
+		{
+			if (statesMatch(state, getPassengers()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean statesMatch(List<Passenger> stateA, List<Passenger> stateB)
+	{
+		if (stateA.size() != stateB.size())
+		{
+			throw new IllegalArgumentException();
+		}
+
+		for (int i=0; i < stateA.size(); ++i)
+		{
+			Passenger pA = stateA.get(i);
+			Passenger pB = stateB.get(i);
+			if (!pA.matches(pB))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void cross(List<Passenger> loadedRaft)

@@ -25,6 +25,11 @@ public class Passenger implements Cloneable
 		return clone;
 	}
 
+	public boolean matches(Passenger other)
+	{
+		return name.equals(other.getName()) && hasCrossed() == other.hasCrossed();
+	}
+
 	public boolean hasCrossed()
 	{
 		return crossed;
