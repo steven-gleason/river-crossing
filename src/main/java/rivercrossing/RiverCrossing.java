@@ -1,5 +1,7 @@
 package rivercrossing;
 
+import java.lang.IllegalStateException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -58,26 +60,27 @@ public abstract class RiverCrossing
 
 	public void endGame()
 	{
-		System.println("Game Solved");
-		System.println(currentStateString());
+		System.out.println("Game Solved");
+		System.out.println(currentStateString());
 		while (!history.isEmpty())
 		{
 			revert();
-			System.println(currentStateString());
+			System.out.println(currentStateString());
 		}
 	}
 
 	public String currentStateString()
 	{
+		String result = "";
 		for (Passenger p : getPassengers())
 		{
-			String result = p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
+			result += p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
 		}
 		return result;
 	}
 	public List<Passenger> getPassengers()
 	{
-		returns currentState;
+		return currentState;
 	}
 
 	public void revert()
@@ -135,6 +138,8 @@ public abstract class RiverCrossing
 				return p;
 			}
 		}
+
+		throw new IllegalStateException();
 	}
 
 }

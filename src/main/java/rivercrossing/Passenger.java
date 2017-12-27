@@ -3,8 +3,10 @@ package rivercrossing;
 public abstract class Passenger
 {
 	protected boolean crossed;
+	protected String name;
 
 	public abstract boolean isRaft();
+	public abstract Passenger clone();
 
 	public boolean hasCrossed()
 	{
@@ -15,4 +17,10 @@ public abstract class Passenger
 	{
 		crossed = !crossed;
 	}
+
+	public String getName()
+	{
+		return name;
+	}
+
 }
