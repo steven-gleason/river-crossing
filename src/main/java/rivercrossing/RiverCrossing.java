@@ -1,5 +1,6 @@
 package rivercrossing;
 
+import java.lang.IllegalArgumentException;
 import java.lang.IllegalStateException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,26 @@ public abstract class RiverCrossing
 	protected List<Passenger> currentState;
 	protected Stack<List<Passenger>> history;
 
-	abstract public boolean isSolved();
 	abstract public boolean isValidRaft(List<Passenger> loadedRaft);
 	abstract public boolean banksAreValid();
+
+	public RiverCrossing()
+	{
+		currentState = new ArrayList();
+		history = new Stack();
+	}
+
+	public boolean isSolved()
+	{
+		for (Passenger passenger : getPassengers())
+		{
+			if (!passenger.hasCrossed())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 	/**
 	* General use move engine.
@@ -23,12 +41,13 @@ public abstract class RiverCrossing
 		Passenger raft = getRaft();
 		boolean direction = raft.hasCrossed();
 
+		if (isSolved())
+		{
+			endGame();
+		}
+
 		for (Passenger p1 : getPassengers())
 		{
-			if (isSolved())
-			{
-				endGame();
-			}
 			List<Passenger> loadedRaft = new ArrayList(3);
 			loadedRaft.add(raft);
 			loadedRaft.add(p1);
@@ -67,6 +86,8 @@ public abstract class RiverCrossing
 			revert();
 			System.out.println(currentStateString());
 		}
+
+		System.exit(0);
 	}
 
 	public String currentStateString()
@@ -88,7 +109,7 @@ public abstract class RiverCrossing
 		currentState = history.pop();
 	}
 
-	public boolean containsRaft(List<Passenger> loadedRaft)
+	public static boolean containsRaft(List<Passenger> loadedRaft)
 	{
 		for (Passenger passenger : loadedRaft)
 		{
@@ -140,6 +161,19 @@ public abstract class RiverCrossing
 		}
 
 		throw new IllegalStateException();
+	}
+
+	public Passenger getPassenger(String passengerName)
+	{
+		for (Passenger p : getPassengers())
+		{
+			if (p.getName().equals(passengerName))
+			{
+				return p;
+			}
+		}
+
+		throw new IllegalArgumentException();
 	}
 
 }
