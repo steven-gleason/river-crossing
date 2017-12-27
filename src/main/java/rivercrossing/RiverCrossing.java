@@ -38,6 +38,7 @@ public abstract class RiverCrossing
 	**/
 	public void nextMove()
 	{
+		System.out.println("nm: " + currentStateString());
 		Passenger raft = getRaft();
 		boolean direction = raft.hasCrossed();
 
@@ -48,17 +49,22 @@ public abstract class RiverCrossing
 
 		for (Passenger p1 : getPassengers())
 		{
-			List<Passenger> loadedRaft = new ArrayList(3);
-			loadedRaft.add(raft);
-			loadedRaft.add(p1);
-			tryMove(loadedRaft);
-			for (Passenger p2 : getPassengers())
+			if (p1.hasCrossed() == direction && !p1.isRaft())
 			{
-				if (p1.getName().compareTo(p2.getName()) > 1)
+				List<Passenger> loadedRaft = new ArrayList(3);
+				loadedRaft.add(raft);
+				loadedRaft.add(p1);
+				tryMove(loadedRaft);
+				for (Passenger p2 : getPassengers())
 				{
-					loadedRaft.add(p2);
-					tryMove(loadedRaft);
-					loadedRaft.remove(loadedRaft.size() -1);
+					if (p2.hasCrossed() == direction
+							&& !p1.getName().equals(p2.getName())
+							&& !p2.isRaft())
+					{
+						loadedRaft.add(p2);
+						tryMove(loadedRaft);
+						loadedRaft.remove(loadedRaft.size() -1);
+					}
 				}
 			}
 		}
@@ -66,14 +72,19 @@ public abstract class RiverCrossing
 
 	private void tryMove(List<Passenger> loadedRaft)
 	{
+		System.out.println("try: " + stateString(loadedRaft));
 		if (isValidRaft(loadedRaft))
 		{
+			System.out.println("raft: valid");
 			cross(loadedRaft);
 			if (banksAreValid() && !hasLooped())
 			{
+				System.out.println("banks: valid; hasLooped: nope");
 				nextMove();
 			}
+			System.out.println("revert");
 		  revert();
+			System.out.println("state: " + currentStateString());
 		}
 	}
 
@@ -92,13 +103,19 @@ public abstract class RiverCrossing
 
 	public String currentStateString()
 	{
+		return stateString(getPassengers());
+	}
+
+	private String stateString(List<Passenger> state)
+	{
 		String result = "";
-		for (Passenger p : getPassengers())
+		for (Passenger p : state)
 		{
 			result += p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
 		}
 		return result;
 	}
+
 	public List<Passenger> getPassengers()
 	{
 		return currentState;
@@ -127,6 +144,7 @@ public abstract class RiverCrossing
 		{
 			if (statesMatch(state, getPassengers()))
 			{
+				System.out.println("has looped");
 				return true;
 			}
 		}
