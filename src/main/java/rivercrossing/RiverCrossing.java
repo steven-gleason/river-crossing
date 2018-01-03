@@ -172,12 +172,13 @@ public abstract class RiverCrossing
 
 	public void cross(List<Passenger> loadedRaft)
 	{
-		List<Passenger> oldState = cloneCurrentState();
-		history.push(oldState);
+		history.push(currentState);
+		currentState = cloneCurrentState();
+
 
 		for (Passenger traveler : loadedRaft)
 		{
-			traveler.cross();
+			getPassenger(traveler.getName()).cross();
 		}
 	}
 
