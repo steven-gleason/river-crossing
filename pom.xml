@@ -12,7 +12,10 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
+							<!--
 							<mainClass>rivercrossing.wolfGoatCabbage.WolfGoatCabbageCrossing</mainClass>
+							-->
+							<mainClass>rivercrossing.weights.WeightsCrossing</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
