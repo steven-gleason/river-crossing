@@ -1,6 +1,5 @@
 package rivercrossing;
 
-import rivercrossing.RiverCrossing;
 import rivercrossing.weights.WeightsCrossing;
 import rivercrossing.wolfGoatCabbage.WolfGoatCabbageCrossing;
 

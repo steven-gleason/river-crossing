@@ -1,5 +1,6 @@
 package rivercrossing.weights;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import rivercrossing.Passenger;
@@ -34,11 +35,13 @@ public class WeightsCrossing extends RiverCrossing
 		Weight three = new Weight(THREE, 3);
 		Weight four = new Weight(FOUR, 4);
 
-		currentState.add(new Raft());
-		currentState.add(one);
-		currentState.add(two);
-		currentState.add(three);
-		currentState.add(four);
+		List<Passenger> passengerList = new ArrayList(4);
+		passengerList.add(new Raft());
+		passengerList.add(one);
+		passengerList.add(two);
+		passengerList.add(three);
+		passengerList.add(four);
+		currentState.setPassengers(passengerList);
 
 		previousMass = 0;
 		massHistory = new Stack();
@@ -89,19 +92,6 @@ public class WeightsCrossing extends RiverCrossing
 	public boolean banksAreValid()
 	{
 		return true;
-	}
-
-	private static boolean containsFarmer(List<Passenger> loadedRaft)
-	{
-		for (Passenger p : loadedRaft)
-		{
-			if (p.getName().equals(FOUR))
-			{
-				return true;
-			}
-		}
-		System.out.println("raft invalid: no farmer");
-		return false;
 	}
 
 }

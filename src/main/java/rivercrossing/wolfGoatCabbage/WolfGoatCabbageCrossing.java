@@ -1,5 +1,6 @@
 package rivercrossing.wolfGoatCabbage;
 
+import java.util.ArrayList;
 import java.util.List;
 import rivercrossing.Passenger;
 import rivercrossing.Raft;
@@ -29,11 +30,14 @@ public class WolfGoatCabbageCrossing extends RiverCrossing
 		Passenger cabbage = new Passenger(CABBAGE);
 		Passenger farmer = new Passenger(FARMER);
 
-		currentState.add(new Raft());
-		currentState.add(wolf);
-		currentState.add(goat);
-		currentState.add(cabbage);
-		currentState.add(farmer);
+		List<Passenger> passengerList = new ArrayList(5);
+		passengerList.add(new Raft());
+		passengerList.add(wolf);
+		passengerList.add(goat);
+		passengerList.add(cabbage);
+		passengerList.add(farmer);
+
+		currentState.setPassengers(passengerList);
 	}
 
 	public boolean isValidRaft(List<Passenger> loadedRaft)
@@ -43,10 +47,10 @@ public class WolfGoatCabbageCrossing extends RiverCrossing
 
 	public boolean banksAreValid()
 	{
-		Passenger wolf = getPassenger(WOLF);
-		Passenger goat = getPassenger(GOAT);
-		Passenger cabbage = getPassenger(CABBAGE);
-		Passenger farmer = getPassenger(FARMER);
+		Passenger wolf = currentState.getPassenger(WOLF);
+		Passenger goat = currentState.getPassenger(GOAT);
+		Passenger cabbage = currentState.getPassenger(CABBAGE);
+		Passenger farmer = currentState.getPassenger(FARMER);
 
 		if (wolf.hasCrossed() == goat.hasCrossed()
 			 && wolf.hasCrossed()	!= farmer.hasCrossed())

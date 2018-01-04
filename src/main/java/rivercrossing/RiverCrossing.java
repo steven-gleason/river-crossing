@@ -8,15 +8,15 @@ import java.util.Stack;
 
 public abstract class RiverCrossing
 {
-	protected List<Passenger> currentState;
-	protected Stack<List<Passenger>> history;
+	protected State currentState;
+	protected Stack<State> history;
 
 	abstract public boolean isValidRaft(List<Passenger> loadedRaft);
 	abstract public boolean banksAreValid();
 
 	public RiverCrossing()
 	{
-		currentState = new ArrayList();
+		currentState = new State();
 		history = new Stack();
 	}
 
@@ -32,14 +32,19 @@ public abstract class RiverCrossing
 		return true;
 	}
 
+	protected List<Passenger> getPassengers()
+	{
+		return currentState.getPassengers();
+	}
+
 	/**
 	* General use move engine.
 	* Assumes 1 or 2 passengers per raft; only 1 raft.
 	**/
 	public void nextMove()
 	{
-		System.out.println("nm: " + currentStateString());
-		Passenger raft = getRaft();
+		System.out.println("nm: " + currentState);
+		Passenger raft = currentState.getRaft();
 		boolean direction = raft.hasCrossed();
 
 		if (isSolved())
@@ -72,7 +77,7 @@ public abstract class RiverCrossing
 
 	private void tryMove(List<Passenger> loadedRaft)
 	{
-		System.out.println("try: " + stateString(loadedRaft));
+		System.out.println("try: " + State.toString(loadedRaft));
 		if (isValidRaft(loadedRaft))
 		{
 			System.out.println("raft: valid");
@@ -84,41 +89,21 @@ public abstract class RiverCrossing
 			}
 			System.out.println("revert");
 		  revert();
-			System.out.println("state: " + currentStateString());
+			System.out.println("state: " + currentState);
 		}
 	}
 
 	public void endGame()
 	{
 		System.out.println("Game Solved");
-		System.out.println(currentStateString());
+		System.out.println(currentState);
 		while (!history.isEmpty())
 		{
 			revert();
-			System.out.println(currentStateString());
+			System.out.println(currentState);
 		}
 
 		System.exit(0);
-	}
-
-	public String currentStateString()
-	{
-		return stateString(getPassengers());
-	}
-
-	private String stateString(List<Passenger> state)
-	{
-		String result = "";
-		for (Passenger p : state)
-		{
-			result += p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
-		}
-		return result;
-	}
-
-	public List<Passenger> getPassengers()
-	{
-		return currentState;
 	}
 
 	public void revert()
@@ -140,9 +125,9 @@ public abstract class RiverCrossing
 
 	public boolean hasLooped()
 	{
-		for (List<Passenger> state : history)
+		for (State state : history)
 		{
-			if (statesMatch(state, getPassengers()))
+			if (currentState.matches(state))
 			{
 				System.out.println("has looped");
 				return true;
@@ -151,74 +136,11 @@ public abstract class RiverCrossing
 		return false;
 	}
 
-	private boolean statesMatch(List<Passenger> stateA, List<Passenger> stateB)
-	{
-		if (stateA.size() != stateB.size())
-		{
-			throw new IllegalArgumentException();
-		}
-
-		for (int i=0; i < stateA.size(); ++i)
-		{
-			Passenger pA = stateA.get(i);
-			Passenger pB = stateB.get(i);
-			if (!pA.matches(pB))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
 	public void cross(List<Passenger> loadedRaft)
 	{
 		history.push(currentState);
-		currentState = cloneCurrentState();
-
-
-		for (Passenger traveler : loadedRaft)
-		{
-			getPassenger(traveler.getName()).cross();
-		}
-	}
-
-	private List<Passenger> cloneCurrentState()
-	{
-		List<Passenger> currentState = getPassengers();
-		List<Passenger> newState = new ArrayList(currentState.size());
-
-		for (Passenger passenger : currentState)
-		{
-			newState.add(passenger.clone());
-		}
-
-		return newState;
-	}
-
-	public Passenger getRaft()
-	{
-		for (Passenger p : getPassengers())
-		{
-			if (p.isRaft())
-			{
-				return p;
-			}
-		}
-
-		throw new IllegalStateException();
-	}
-
-	public Passenger getPassenger(String passengerName)
-	{
-		for (Passenger p : getPassengers())
-		{
-			if (p.getName().equals(passengerName))
-			{
-				return p;
-			}
-		}
-
-		throw new IllegalArgumentException();
+		currentState = currentState.clone();
+		currentState.cross(loadedRaft);
 	}
 
 }
