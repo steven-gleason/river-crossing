@@ -16,9 +16,6 @@ public class WeightsCrossing extends RiverCrossing
 	private static final String THREE = "three";
 	private static final String FOUR = "four";
 
-	private int previousMass;
-	private Stack<Integer> massHistory;
-
 	public static void main(String[] args)
 	{
 		WeightsCrossing wc = new WeightsCrossing();
@@ -41,30 +38,34 @@ public class WeightsCrossing extends RiverCrossing
 		passengerList.add(two);
 		passengerList.add(three);
 		passengerList.add(four);
-		currentState.setPassengers(passengerList);
 
-		previousMass = 0;
-		massHistory = new Stack();
+		currentState = new WeightedState();
+		currentState.setPassengers(passengerList);
+		setPreviousMass(0);
 	}
 
 	public boolean isValidRaft(List<Passenger> loadedRaft)
 	{
 		int totalMass = getMassOfRaft(loadedRaft);
 		return totalMass > 0
-			&& (giveOrTakeOne(totalMass, previousMass) || previousMass == 0);
+			&& (giveOrTakeOne(totalMass, getPreviousMass())
+					|| getPreviousMass() == 0);
 	}
 
 	public void cross(List<Passenger> loadedRaft)
 	{
 		super.cross(loadedRaft);
-		massHistory.push(previousMass);
-		previousMass = getMassOfRaft(loadedRaft);
+		setPreviousMass(getMassOfRaft(loadedRaft));
 	}
 
-	public void revert()
+	private int getPreviousMass()
 	{
-		super.revert();
-		previousMass = massHistory.pop();
+		return ((WeightedState)currentState).getPreviousMass();
+	}
+
+	private void setPreviousMass(int previousMass)
+	{
+		((WeightedState)currentState).setPreviousMass(previousMass);
 	}
 
 	private int getMassOfRaft(List<Passenger> loadedRaft)
