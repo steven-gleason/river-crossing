@@ -8,6 +8,11 @@ public class WeightedState extends State
 {
 	protected int previousMass;
 
+	public WeightedState()
+	{
+		super(WeightsCrossing.class);
+	}
+
 	public int getPreviousMass()
 	{
 		return previousMass;

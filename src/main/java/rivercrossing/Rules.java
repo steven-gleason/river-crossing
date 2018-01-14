@@ -1,36 +1,55 @@
 package rivercrossing;
 
-import java.lang.IllegalArgumentException;
-import java.lang.IllegalStateException;
+import graph.Node;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
+import java.util.NoSuchElementException;
 
-public abstract class RiverCrossing
+public abstract class Rules implements Iterator<Node>
 {
 	protected State currentState;
-	protected Stack<State> history;
-	protected Stack<State> shortestPath;
+	protected Iterator<Passenger> p1Iterator;
+	protected Iterator<Passenger> p2Iterator;
+	protected Passenger p1;
+	protected State next;
 
-	abstract public boolean isValidRaft(List<Passenger> loadedRaft);
-	abstract public boolean banksAreValid();
+	abstract public State getInitialState();
+	abstract protected boolean isValidRaft(List<Passenger> loadedRaft);
+	abstract protected boolean banksAreValid();
 
-	public RiverCrossing()
+	public void setState(State currentState)
 	{
-		currentState = new State();
-		history = new Stack();
+		this.currentState = currentState;
+		p1Iterator = getPassengers().iterator();
+		p2Iterator = null;
+		next = null;
 	}
 
-	public boolean isSolved()
+	public boolean hasNext()
 	{
-		for (Passenger passenger : getPassengers())
+		if (next == null)
 		{
-			if (!passenger.hasCrossed())
-			{
-				return false;
-			}
+			findNext();
 		}
-		return true;
+		return next != null;
+	}
+
+	public State next()
+	{
+		if (!hasNext())
+		{
+			throw new NoSuchElementException();
+		}
+
+		State returnMe = next;
+		next = null;
+		return returnMe;
+	}
+
+	public void remove()
+	{
+		throw new UnsupportedOperationException();
 	}
 
 	protected List<Passenger> getPassengers()
@@ -42,133 +61,104 @@ public abstract class RiverCrossing
 	* General use move engine.
 	* Assumes 1 or 2 passengers per raft; only 1 raft.
 	**/
-	public void nextMove()
+	protected void findNext()
 	{
 		System.out.println("nm: " + currentState);
-		System.out.println("current path: " + history.size());
-		Passenger raft = currentState.getRaft();
-		boolean direction = raft.hasCrossed();
 
-		if (!pathIsShorter())
+		// finish using p1
+		while (p2Iterator != null && p2Iterator.hasNext())
 		{
-			System.out.println("DEBUG: exceeded shortest path");
-			return;
-		}
-
-		if (isSolved())
-		{
-			System.out.println("DEBUG: found shorter path");
-			shortestPath = (Stack<State>) history.clone();
-			shortestPath.push(currentState);
-			System.out.println("DEBUG: **BEGIN SOLUTION**");
-			printSolution();
-			System.out.println("DEBUG: **END SOLUTION **");
-			return;
-		}
-
-		for (Passenger p1 : getPassengers())
-		{
-			if (p1.hasCrossed() == direction && !p1.isRaft())
+			State newMove = tryMove(p1, p2Iterator.next());
+			if (newMove != null)
 			{
-				List<Passenger> loadedRaft = new ArrayList(3);
-				loadedRaft.add(raft);
-				loadedRaft.add(p1);
-				tryMove(loadedRaft);
-				for (Passenger p2 : getPassengers())
+				next = newMove;
+				return;
+			}
+		}
+
+		// try next p1 options
+		while (p1Iterator.hasNext())
+		{
+			p1 = p1Iterator.next();
+			State newMove = tryMove(p1, null);
+			if (newMove != null)
+			{
+				next = newMove;
+				return;
+			}
+			p2Iterator = getPassengers().iterator();
+			while (p2Iterator.hasNext())
+			{
+				Passenger p2 = p2Iterator.next();
+				newMove = tryMove(p1, p2);
+				if (newMove != null)
 				{
-					if (p2.hasCrossed() == direction
-							&& !p1.getName().equals(p2.getName())
-							&& !p2.isRaft())
-					{
-						loadedRaft.add(p2);
-						tryMove(loadedRaft);
-						loadedRaft.remove(loadedRaft.size() -1);
-					}
+					next = newMove;
+					return;
 				}
 			}
 		}
 	}
 
-	private void tryMove(List<Passenger> loadedRaft)
+	private State tryMove(Passenger p1, Passenger p2)
+	{
+		Passenger raft = currentState.getRaft();
+		State newMove = null;
+
+		if (isSensiblePassengerList(p1, p2, raft))
+		{
+			List<Passenger> loadedRaft = new ArrayList(3);
+			loadedRaft.add(raft);
+			loadedRaft.add(p1);
+			if (p2 != null)
+			{
+				loadedRaft.add(p2);
+			}
+			newMove = tryMove(loadedRaft);
+		}
+		return newMove;
+	}
+
+	private boolean isSensiblePassengerList(Passenger p1, Passenger p2, Passenger raft)
+	{
+		boolean direction = raft.hasCrossed();
+		return isSensiblePassenger(p1, direction)
+			&& (p2 == null || (isSensiblePassenger(p2, direction)
+					&& !p1.getName().equals(p2.getName())));
+	}
+
+	private boolean isSensiblePassenger(Passenger passenger, boolean direction)
+	{
+		return passenger.hasCrossed() == direction && !passenger.isRaft();
+	}
+
+	private State tryMove(List<Passenger> loadedRaft)
 	{
 		System.out.println("try: " + State.toString(loadedRaft));
+		State newState = null;
 		if (isValidRaft(loadedRaft))
 		{
 			System.out.println("raft: valid");
-			cross(loadedRaft);
-			if (banksAreValid() && !hasLooped())
+			newState = cross(loadedRaft);
+			if (banksAreValid())
 			{
-				System.out.println("banks: valid; hasLooped: nope");
-				nextMove();
+				System.out.println("banks: valid");
 			}
-			System.out.println("revert");
-		  revert();
-			System.out.println("state: " + currentState);
-		}
-	}
-
-	public void endGame()
-	{
-		if (shortestPath == null)
-		{
-			System.out.println("no solution");
-		}
-		else
-		{
-			System.out.println("Game Solved in " + shortestPath.size() + " moves");
-			printSolution();
-		}
-	}
-
-	public void printSolution()
-	{
-		for (State state : shortestPath)
-		{
-			System.out.println(state);
-		}
-	}
-
-	public void revert()
-	{
-		currentState = history.pop();
-	}
-
-	public static boolean containsRaft(List<Passenger> loadedRaft)
-	{
-		for (Passenger passenger : loadedRaft)
-		{
-			if (passenger.isRaft())
+			else
 			{
-				return true;
+				System.out.println("invalid move");
+				System.out.println("state: " + currentState);
+				newState = null;
 			}
 		}
-		return false;
+		return newState;
 	}
 
-	public boolean hasLooped()
+	protected State cross(List<Passenger> loadedRaft)
 	{
-		for (State state : history)
-		{
-			if (currentState.matches(state))
-			{
-				System.out.println("has looped");
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void cross(List<Passenger> loadedRaft)
-	{
-		history.push(currentState);
-		currentState = currentState.clone();
-		currentState.cross(loadedRaft);
-	}
-
-	protected boolean pathIsShorter()
-	{
-		return shortestPath == null || history.size()+1 < shortestPath.size();
-		// +1 because history does not contain the current state
+		State newState = currentState.clone();
+		newState.cross(loadedRaft);
+		return newState;
 	}
 
 }

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import rivercrossing.Passenger;
 import rivercrossing.Raft;
-import rivercrossing.RiverCrossing;
+import rivercrossing.Rules;
+import rivercrossing.State;
 
-public class WolfGoatCabbageCrossing extends RiverCrossing
+public class WolfGoatCabbageCrossing extends Rules
 {
 
 	private static final String WOLF = "wolf";
@@ -14,17 +15,8 @@ public class WolfGoatCabbageCrossing extends RiverCrossing
 	private static final String CABBAGE = "cabbage";
 	private static final String FARMER = "farmer";
 
-	public static void main(String[] args)
+	public State getInitialState()
 	{
-		WolfGoatCabbageCrossing wgc = new WolfGoatCabbageCrossing();
-		wgc.nextMove();
-		System.out.println("no solution");
-	}
-
-
-	public WolfGoatCabbageCrossing()
-	{
-		super();
 		Passenger wolf = new Passenger(WOLF);
 		Passenger goat = new Passenger(GOAT);
 		Passenger cabbage = new Passenger(CABBAGE);
@@ -37,12 +29,14 @@ public class WolfGoatCabbageCrossing extends RiverCrossing
 		passengerList.add(cabbage);
 		passengerList.add(farmer);
 
-		currentState.setPassengers(passengerList);
+		State initialState = new State(WolfGoatCabbageCrossing.class);
+		initialState.setPassengers(passengerList);
+		return initialState;
 	}
 
 	public boolean isValidRaft(List<Passenger> loadedRaft)
 	{
-		return containsRaft(loadedRaft) && containsFarmer(loadedRaft);
+		return containsFarmer(loadedRaft);
 	}
 
 	public boolean banksAreValid()

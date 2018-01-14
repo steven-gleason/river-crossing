@@ -2,13 +2,12 @@ package rivercrossing.weights;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 import rivercrossing.Passenger;
 import rivercrossing.Raft;
-import rivercrossing.RiverCrossing;
+import rivercrossing.Rules;
 import rivercrossing.weights.Weight;
 
-public class WeightsCrossing extends RiverCrossing
+public class WeightsCrossing extends Rules
 {
 
 	private static final String ONE = "one";
@@ -16,17 +15,8 @@ public class WeightsCrossing extends RiverCrossing
 	private static final String THREE = "three";
 	private static final String FOUR = "four";
 
-	public static void main(String[] args)
+	public WeightedState getInitialState()
 	{
-		WeightsCrossing wc = new WeightsCrossing();
-		wc.nextMove();
-		System.out.println("no solution");
-	}
-
-
-	public WeightsCrossing()
-	{
-		super();
 		Weight one = new Weight(ONE, 1);
 		Weight two = new Weight(TWO, 2);
 		Weight three = new Weight(THREE, 3);
@@ -39,9 +29,15 @@ public class WeightsCrossing extends RiverCrossing
 		passengerList.add(three);
 		passengerList.add(four);
 
-		currentState = new WeightedState();
-		currentState.setPassengers(passengerList);
-		setPreviousMass(0);
+		WeightedState initialState = new WeightedState();
+		initialState.setPassengers(passengerList);
+		initialState.setPreviousMass(0);
+		return initialState;
+	}
+
+	public boolean banksAreValid()
+	{
+		return true;
 	}
 
 	public boolean isValidRaft(List<Passenger> loadedRaft)
@@ -52,10 +48,11 @@ public class WeightsCrossing extends RiverCrossing
 					|| getPreviousMass() == 0);
 	}
 
-	public void cross(List<Passenger> loadedRaft)
+	public WeightedState cross(List<Passenger> loadedRaft)
 	{
-		super.cross(loadedRaft);
-		setPreviousMass(getMassOfRaft(loadedRaft));
+		WeightedState newState = (WeightedState) super.cross(loadedRaft);
+		newState.setPreviousMass(getMassOfRaft(loadedRaft));
+		return newState;
 	}
 
 	private int getPreviousMass()
@@ -88,11 +85,6 @@ public class WeightsCrossing extends RiverCrossing
 		return a == b
 			|| a + 1 == b
 			|| a - 1 == b;
-	}
-
-	public boolean banksAreValid()
-	{
-		return true;
 	}
 
 }

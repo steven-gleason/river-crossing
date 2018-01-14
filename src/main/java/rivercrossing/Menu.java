@@ -24,7 +24,7 @@ public class Menu
 			choosenRc = getUsersChoice();
 		}
 
-		choosenRc.nextMove();
+		choosenRc.solve();
 		choosenRc.endGame();
 	}
 
@@ -94,11 +94,11 @@ public class Menu
 		switch (riverCrossingNumber)
 		{
 			case WOLF_GOAT_CABBAGE:
-				choosenRc = new WolfGoatCabbageCrossing();
+				choosenRc = new RiverCrossing(WolfGoatCabbageCrossing.class);
 				break;
 
 			case GENIUS_WEIGHTS:
-				choosenRc = new WeightsCrossing();
+				choosenRc = new RiverCrossing(WeightsCrossing.class);
 				break;
 
 			default:

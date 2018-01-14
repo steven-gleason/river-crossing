@@ -2,23 +2,31 @@ package rivercrossing;
 
 import graph.Node;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class State extends Node
 {
 	protected List<Passenger> passengerList;
-	protected Class<Rules> rulesClass;
+	protected Class<? extends Rules> rulesClass;
 
-	public State(Class<Rules> rulesClass)
+	public State(Class<? extends Rules> rulesClass)
 	{
 		this.rulesClass = rulesClass;
 	}
 
-	public Iterator<State> iterator()
+	public Iterator<Node> iterator()
 	{
-		Rules newStateIterator = rulesClass.newInstance();
-		newStateIterator.setState(this);
-		return newStateIterator;
+		try
+		{
+			Rules newStateIterator = rulesClass.newInstance();
+			newStateIterator.setState(this);
+			return newStateIterator;
+		}
+		catch (InstantiationException | IllegalAccessException e)
+		{
+			throw new IllegalStateException(e);
+		}
 	}
 
 	public boolean isSink()

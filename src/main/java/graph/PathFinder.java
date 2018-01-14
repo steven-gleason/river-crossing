@@ -17,17 +17,12 @@ public class PathFinder
 	/**
 		* returns -1 if no path is found
 		*/
-	public int findShortestPath()
+	public Stack<Node> findShortestPath()
 	{
 		currentPath = new Stack();
 		shortestPath = null;
 		continueFindingShortestPath(startNode);
-		if (shortestPath == null)
-		{
-			return -1;
-		}
-
-		return shortestPath.size();
+		return shortestPath;
 	}
 
 	private void continueFindingShortestPath(Node nextNode)
