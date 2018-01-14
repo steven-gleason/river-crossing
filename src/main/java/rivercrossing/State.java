@@ -1,11 +1,37 @@
 package rivercrossing;
 
+import graph.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-public class State
+public class State extends Node
 {
 	protected List<Passenger> passengerList;
+	protected Class<Rules> rulesClass;
+
+	public State(Class<Rules> rulesClass)
+	{
+		this.rulesClass = rulesClass;
+	}
+
+	public Iterator<State> iterator()
+	{
+		Rules newStateIterator = rulesClass.newInstance();
+		newStateIterator.setState(this);
+		return newStateIterator;
+	}
+
+	public boolean isSink()
+	{
+		for (Passenger passenger : passengerList)
+		{
+			if (!passenger.hasCrossed())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public List<Passenger> getPassengers()
 	{
@@ -45,7 +71,7 @@ public class State
 
 	public State clone()
 	{
-		State newState = new State();
+		State newState = new State(rulesClass);
 		List<Passenger> newPassengerList = new ArrayList(getPassengers().size());
 
 		for (Passenger passenger : getPassengers())
