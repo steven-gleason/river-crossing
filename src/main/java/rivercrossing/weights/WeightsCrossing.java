@@ -5,6 +5,7 @@ import java.util.List;
 import rivercrossing.Passenger;
 import rivercrossing.Raft;
 import rivercrossing.Rules;
+import rivercrossing.State;
 import rivercrossing.weights.Weight;
 
 public class WeightsCrossing extends Rules
@@ -35,7 +36,7 @@ public class WeightsCrossing extends Rules
 		return initialState;
 	}
 
-	public boolean banksAreValid()
+	public boolean banksAreValid(State newState)
 	{
 		return true;
 	}

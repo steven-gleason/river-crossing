@@ -14,9 +14,6 @@ public class PathFinder
 		this.startNode = startNode;
 	}
 
-	/**
-		* returns -1 if no path is found
-		*/
 	public Stack<Node> findShortestPath()
 	{
 		currentPath = new Stack();
@@ -129,6 +126,7 @@ public class PathFinder
 		{
 			if (node.equals(nextNode))
 			{
+				System.out.println("DEBUG: looped");
 				return true;
 			}
 		}

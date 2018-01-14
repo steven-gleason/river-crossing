@@ -39,7 +39,7 @@ public class WolfGoatCabbageCrossing extends Rules
 		return containsFarmer(loadedRaft);
 	}
 
-	public boolean banksAreValid()
+	public boolean banksAreValid(State currentState)
 	{
 		Passenger wolf = currentState.getPassenger(WOLF);
 		Passenger goat = currentState.getPassenger(GOAT);

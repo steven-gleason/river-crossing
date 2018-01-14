@@ -114,9 +114,15 @@ public class State extends Node
 		return result;
 	}
 
-	public boolean matches(State otherState)
+	public boolean equals(Object otherState)
 	{
-		return statesMatch(this.passengerList, otherState.getPassengers());
+		if (!(otherState instanceof State))
+		{
+			throw new IllegalArgumentException();
+		}
+
+		return otherState != null
+			&& statesMatch(this.passengerList, ((State)otherState).getPassengers());
 	}
 
 	private boolean statesMatch(List<Passenger> stateA, List<Passenger> stateB)

@@ -16,7 +16,7 @@ public abstract class Rules implements Iterator<Node>
 
 	abstract public State getInitialState();
 	abstract protected boolean isValidRaft(List<Passenger> loadedRaft);
-	abstract protected boolean banksAreValid();
+	abstract protected boolean banksAreValid(State newState);
 
 	public void setState(State currentState)
 	{
@@ -140,7 +140,7 @@ public abstract class Rules implements Iterator<Node>
 		{
 			System.out.println("raft: valid");
 			newState = cross(loadedRaft);
-			if (banksAreValid())
+			if (banksAreValid(newState))
 			{
 				System.out.println("banks: valid");
 			}

@@ -36,9 +36,14 @@ public class WeightedState extends State
 		return super.toString() + "PreviousMass " + previousMass;
 	}
 
-	public boolean matches(State otherState)
+	public boolean equals(Object otherState)
 	{
-		return super.matches(otherState) && previousMass == ((WeightedState)otherState).previousMass;
+		if (!(otherState instanceof WeightedState))
+		{
+			throw new IllegalArgumentException();
+		}
+
+		return super.equals(otherState) && previousMass == ((WeightedState)otherState).previousMass;
 	}
 
 }
