@@ -10,6 +10,7 @@ public abstract class RiverCrossing
 {
 	protected State currentState;
 	protected Stack<State> history;
+	protected Stack<State> shortestPath;
 
 	abstract public boolean isValidRaft(List<Passenger> loadedRaft);
 	abstract public boolean banksAreValid();
@@ -44,12 +45,22 @@ public abstract class RiverCrossing
 	public void nextMove()
 	{
 		System.out.println("nm: " + currentState);
+		System.out.println("current path: " + history.size());
 		Passenger raft = currentState.getRaft();
 		boolean direction = raft.hasCrossed();
 
+		if (!pathIsShorter())
+		{
+			System.out.println("DEBUG: exceeded shortest path");
+			return;
+		}
+
 		if (isSolved())
 		{
-			endGame();
+			System.out.println("DEBUG: found shorter path");
+			shortestPath = (Stack<State>) history.clone();
+			shortestPath.push(currentState);
+			return;
 		}
 
 		for (Passenger p1 : getPassengers())
@@ -95,12 +106,22 @@ public abstract class RiverCrossing
 
 	public void endGame()
 	{
-		System.out.println("Game Solved");
-		System.out.println(currentState);
-		while (!history.isEmpty())
+		if (shortestPath == null)
 		{
-			revert();
-			System.out.println(currentState);
+			System.out.println("no solution");
+		}
+		else
+		{
+			System.out.println("Game Solved in " + shortestPath.size() + " moves");
+			printSolution();
+		}
+	}
+
+	public void printSolution()
+	{
+		while (!shortestPath.isEmpty())
+		{
+			System.out.println(shortestPath.pop());
 		}
 
 		System.exit(0);
@@ -141,6 +162,12 @@ public abstract class RiverCrossing
 		history.push(currentState);
 		currentState = currentState.clone();
 		currentState.cross(loadedRaft);
+	}
+
+	protected boolean pathIsShorter()
+	{
+		return shortestPath == null || history.size()+1 < shortestPath.size();
+		// +1 because history does not contain the current state
 	}
 
 }

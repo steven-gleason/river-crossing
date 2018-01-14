@@ -25,7 +25,7 @@ public class Menu
 		}
 
 		choosenRc.nextMove();
-		System.out.println("no solution");
+		choosenRc.endGame();
 	}
 
 	private static void printMenu()
