@@ -11,8 +11,19 @@ public class Menu
 
 	public static void main(String[] args)
 	{
-		printMenu();
-		RiverCrossing choosenRc = getUsersChoice();
+		RiverCrossing choosenRc = null;
+
+		if (args.length > 0)
+		{
+			choosenRc = riverCrossingFactory(args[0]);
+		}
+
+		if (choosenRc == null)
+		{
+			printMenu();
+			choosenRc = getUsersChoice();
+		}
+
 		choosenRc.nextMove();
 		System.out.println("no solution");
 	}
