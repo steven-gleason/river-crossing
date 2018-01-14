@@ -60,6 +60,9 @@ public abstract class RiverCrossing
 			System.out.println("DEBUG: found shorter path");
 			shortestPath = (Stack<State>) history.clone();
 			shortestPath.push(currentState);
+			System.out.println("DEBUG: **BEGIN SOLUTION**");
+			printSolution();
+			System.out.println("DEBUG: **END SOLUTION **");
 			return;
 		}
 
@@ -119,12 +122,10 @@ public abstract class RiverCrossing
 
 	public void printSolution()
 	{
-		while (!shortestPath.isEmpty())
+		for (State state : shortestPath)
 		{
-			System.out.println(shortestPath.pop());
+			System.out.println(state);
 		}
-
-		System.exit(0);
 	}
 
 	public void revert()
