@@ -9,7 +9,6 @@ public class PathFinder
 {
 	protected Node startNode;
 	protected Stack<Node> currentPath;
-	protected Stack<Node> shortestPath;
 	protected Map<Node, Node> nodeCache;
 
 	public PathFinder(Node startNode)
@@ -21,9 +20,8 @@ public class PathFinder
 	public Stack<Node> findShortestPath()
 	{
 		currentPath = new Stack();
-		shortestPath = null;
 		continueFindingShortestPath(startNode);
-		return shortestPath;
+		return pathAsStack();
 	}
 
 	private void continueFindingShortestPath(Node nextNode)
@@ -69,29 +67,38 @@ public class PathFinder
 		{
 			currentPath.push(nextNode);
 			reDistancePath();
-			if (currentPathIsShortestKnown())
-			{
-				shortestPath = (Stack<Node>) currentPath.clone();
-			}
 			currentPath.pop();
 		}
 	}
 
 	private void reDistancePath()
 	{
-		int currentNodeDistance = getCurrentNode().getDistanceFromSink();
-		int distance = currentPath.size() + currentNodeDistance - 1;
-		for (Node node : currentPath)
+		int distance = getCurrentNode().getDistanceFromSink();
+		Node previousNode = getCurrentNode().getNextNode();
+		Stack<Node> reversePath = new Stack();
+
+		while (!currentPath.empty())
 		{
+			Node node = currentPath.pop();
+			reversePath.push(node);
+
 			if (node.getDistanceFromSink() == null
-					|| node.getDistanceFromSink() > distance)
+					|| node.getDistanceFromSink() >= distance)
 			{
-				node.setDistanceFromSink(distance--);
+				node.setDistanceFromSink(distance++);
+				node.setNextNode(previousNode);
+				previousNode = node;
 			}
 			else
 			{
-				return;
+				System.out.println("DEBUG: reDistance already contains shorter path");
+				break;
 			}
+		}
+
+		while (!reversePath.isEmpty())
+		{
+			currentPath.push(reversePath.pop());
 		}
 	}
 
@@ -120,13 +127,8 @@ public class PathFinder
 
 	private boolean tooDeep()
 	{
-		return shortestPath != null && currentPath.size() >= shortestPath.size();
-	}
-
-	private boolean currentPathIsShortestKnown()
-	{
-		return shortestPath == null
-			|| startNode.getDistanceFromSink() < shortestPath.size() -1;
+		Integer shortestPathSize = startNode.getDistanceFromSink();
+		return shortestPathSize != null && currentPath.size() >= shortestPathSize;
 	}
 
 	private boolean inLoop(Node nextNode)
@@ -155,6 +157,22 @@ public class PathFinder
 			System.out.println("TRACE: not cached " + newNode);
 			nodeCache.put(newNode, newNode);
 			return newNode;
+		}
+	}
+
+	private Stack<Node> pathAsStack()
+	{
+		Stack<Node> path = new Stack();
+		buildPath(startNode, path);
+		return path;
+	}
+
+	private void buildPath(Node currentNode, Stack<Node> path)
+	{
+		if (currentNode != null)
+		{
+			path.push(currentNode);
+			buildPath(currentNode.getNextNode(), path);
 		}
 	}
 }
