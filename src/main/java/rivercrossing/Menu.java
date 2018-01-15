@@ -1,5 +1,6 @@
 package rivercrossing;
 
+import rivercrossing.fourSoldiers.FourSoldiersRules;
 import rivercrossing.weights.WeightsCrossing;
 import rivercrossing.wolfGoatCabbage.WolfGoatCabbageCrossing;
 
@@ -7,7 +8,8 @@ public class Menu
 {
 
 	private static final int WOLF_GOAT_CABBAGE = 1;
-	private static final int GENIUS_WEIGHTS = 2;
+	private static final int FOUR_SOLDIERS = 2;
+	private static final int GENIUS_WEIGHTS = 3;
 
 	public static void main(String[] args)
 	{
@@ -33,12 +35,19 @@ public class Menu
 		StringBuffer menuText = new StringBuffer();
 		menuText.append("** River Crossing **");
 		menuText.append("\n");
+
 		menuText.append(WOLF_GOAT_CABBAGE);
 		menuText.append(" - Classic: Wolf, Goat Cabbage");
 		menuText.append("\n");
+
+		menuText.append(FOUR_SOLDIERS);
+		menuText.append(" - Four Soldiers");
+		menuText.append("\n");
+
 		menuText.append(GENIUS_WEIGHTS);
 		menuText.append(" - Genius Weights");
 		menuText.append("\n");
+
 		menuText.append("Q - Quit");
 		System.out.println(menuText);
 	}
@@ -95,6 +104,10 @@ public class Menu
 		{
 			case WOLF_GOAT_CABBAGE:
 				choosenRc = new RiverCrossing(WolfGoatCabbageCrossing.class);
+				break;
+
+			case FOUR_SOLDIERS:
+				choosenRc = new RiverCrossing(FourSoldiersRules.class);
 				break;
 
 			case GENIUS_WEIGHTS:
