@@ -46,4 +46,9 @@ public class WeightedState extends State
 		return super.equals(otherState) && previousMass == ((WeightedState)otherState).previousMass;
 	}
 
+	public int hashCode()
+	{
+		return super.hashCode() + previousMass;
+	}
+
 }

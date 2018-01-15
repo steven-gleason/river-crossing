@@ -1,6 +1,8 @@
 package graph;
 
 import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class PathFinder
@@ -8,10 +10,12 @@ public class PathFinder
 	protected Node startNode;
 	protected Stack<Node> currentPath;
 	protected Stack<Node> shortestPath;
+	protected Map<Node, Node> nodeCache;
 
 	public PathFinder(Node startNode)
 	{
 		this.startNode = startNode;
+		nodeCache = new HashMap();
 	}
 
 	public Stack<Node> findShortestPath()
@@ -39,13 +43,18 @@ public class PathFinder
 		currentPath.push(nextNode);
 		for (Node child : nextNode)
 		{
-			continueFindingShortestPath(child);
+			Node persistentNode = cacheNode(child);
+			continueFindingShortestPath(persistentNode);
 		}
 		currentPath.pop();
 	}
 
 	private boolean hasAKnownPath(Node nextNode)
 	{
+		if (nextNode.getDistanceFromSink() != null)
+		{
+			System.out.println("DEBUG: known path: " + nextNode.getDistanceFromSink());
+		}
 		return nextNode.isSink() || nextNode.getDistanceFromSink() != null;
 	}
 
@@ -132,5 +141,20 @@ public class PathFinder
 		}
 
 		return false;
+	}
+
+	private Node cacheNode(Node newNode)
+	{
+		if (nodeCache.containsKey(newNode))
+		{
+			System.out.println("TRACE: cached node " + nodeCache.get(newNode));
+			return nodeCache.get(newNode);
+		}
+		else
+		{
+			System.out.println("TRACE: not cached " + newNode);
+			nodeCache.put(newNode, newNode);
+			return newNode;
+		}
 	}
 }

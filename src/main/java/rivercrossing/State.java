@@ -114,6 +114,11 @@ public class State extends Node
 		return result;
 	}
 
+	public int hashCode()
+	{
+		return getPassengers().hashCode();
+	}
+
 	public boolean equals(Object otherState)
 	{
 		if (!(otherState instanceof State))
