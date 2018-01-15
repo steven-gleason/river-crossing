@@ -101,7 +101,7 @@ public class State extends Node
 
 	public String toString()
 	{
-		return toString(passengerList);
+		return toString(passengerList) + "Dist: " + getDistanceFromSink() + "; ";
 	}
 
 	public static String toString(List<Passenger> passengerList)

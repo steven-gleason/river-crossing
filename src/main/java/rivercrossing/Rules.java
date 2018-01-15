@@ -80,13 +80,13 @@ public abstract class Rules implements Iterator<Node>
 		while (p1Iterator.hasNext())
 		{
 			p1 = p1Iterator.next();
+			p2Iterator = getPassengers().iterator();
 			State newMove = tryMove(p1, null);
 			if (newMove != null)
 			{
 				next = newMove;
 				return;
 			}
-			p2Iterator = getPassengers().iterator();
 			while (p2Iterator.hasNext())
 			{
 				Passenger p2 = p2Iterator.next();
