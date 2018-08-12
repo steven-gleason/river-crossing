@@ -73,21 +73,19 @@ public class PathFinder
 
 	private void reDistancePath()
 	{
-		int distance = getCurrentNode().getDistanceFromSink();
-		Node previousNode = getCurrentNode().getNextNode();
 		Stack<Node> reversePath = new Stack();
+
+		Node node = currentPath.pop();
+		reversePath.push(node);
 
 		while (!currentPath.empty())
 		{
-			Node node = currentPath.pop();
-			reversePath.push(node);
-
-			if (node.getDistanceFromSink() == null
-					|| node.getDistanceFromSink() >= distance)
+			if (nodeIsCloser(node))
 			{
-				node.setDistanceFromSink(distance++);
-				node.setNextNode(previousNode);
-				previousNode = node;
+				getCurrentNode().setDistanceFromSink(node.getDistanceFromSink() + 1);
+				getCurrentNode().setNextNode(node);
+				node = currentPath.pop();
+				reversePath.push(node);
 			}
 			else
 			{
