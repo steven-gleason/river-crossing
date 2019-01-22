@@ -11,7 +11,7 @@ import rivercrossing.Passenger;
 import rivercrossing.Raft;
 import rivercrossing.State;
 
-public class FourSoldiersRulesTest
+public class FourSoldiersRulesTest extends FourSoldiersRules
 {
 	private FourSoldiersRules testSubject;
 
@@ -29,27 +29,14 @@ public class FourSoldiersRulesTest
 		assertTrue(isValid);
 	}
 
-	private State buildState(boolean lonelySide, boolean arrogantSide, boolean braveASide, boolean braveBSide)
+	private State buildState(boolean lazySide, boolean arrogantSide, boolean braveASide, boolean braveBSide)
 	{
-		Passenger lonely = new Passenger("lonely");
-		Passenger arrogant = new Passenger("arrogant");
-		Passenger braveA = new Passenger("brave_A");
-		Passenger braveB = new Passenger("brave_B");
+		State state = getInitialState();
 
-		lonely.setCrossed(lonelySide);
-		arrogant.setCrossed(arrogantSide);
-		braveA.setCrossed(braveASide);
-		braveB.setCrossed(braveBSide);
-
-		List<Passenger> passengers = new ArrayList<>();
-		passengers.add(new Raft());
-		passengers.add(lonely);
-		passengers.add(arrogant);
-		passengers.add(braveA);
-		passengers.add(braveB);
-
-		State state = new State(testSubject.getClass());
-		state.setPassengers(passengers);
+		state.getPassenger(LAZY).setCrossed(lazySide);
+		state.getPassenger(ARROGANT).setCrossed(arrogantSide);
+		state.getPassenger(BRAVE_A).setCrossed(braveASide);
+		state.getPassenger(BRAVE_B).setCrossed(braveBSide);
 
 		return state;
 	}
