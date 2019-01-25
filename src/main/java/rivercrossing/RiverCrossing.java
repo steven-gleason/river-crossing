@@ -36,7 +36,7 @@ public class RiverCrossing
 		}
 		else
 		{
-			System.out.println("Game Solved in " + (shortestPath.size() - 1) + " moves");
+			System.out.println("Game Solved in " + getPathLength() + " moves");
 			printSolution();
 		}
 	}
@@ -47,6 +47,11 @@ public class RiverCrossing
 		{
 			System.out.println(state);
 		}
+	}
+
+	public int getPathLength()
+	{
+		return shortestPath.size() - 1;
 	}
 
 }
