@@ -101,17 +101,50 @@ public class State extends Node
 
 	public String toString()
 	{
-		return toString(getPassengers()) + "Dist: " + getDistanceFromSink() + "; ";
+		return toString(getPassengers());
 	}
 
 	public static String toString(List<Passenger> passengers)
 	{
-		String result = "";
+		String leftSide = "";
+		String rightSide = "";
+		Passenger raft = null;
+
 		for (Passenger p : passengers)
 		{
-			result += p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
+			if (p.isRaft())
+			{
+				// save raft for later
+				raft = p;
+			}
+			else
+			{
+				// add to left or right string
+				if (p.hasCrossed())
+				{
+					rightSide += p.getName() + " ";
+				}
+				else
+				{
+					leftSide += p.getName() + " ";
+				}
+			}
 		}
-		return result;
+
+		// add the raft to the appropriate side
+		if (raft.hasCrossed())
+		{
+			rightSide = raft.getName() + " " + rightSide;
+		}
+		else
+		{
+			leftSide += raft.getName();
+		}
+
+		// put it all together
+		String result = leftSide.trim() + "  /~~~/  " + rightSide.trim();
+
+		return result.trim();
 	}
 
 	/**

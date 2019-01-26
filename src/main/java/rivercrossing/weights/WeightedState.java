@@ -33,7 +33,7 @@ public class WeightedState extends State
 
 	public String toString()
 	{
-		return super.toString() + "PreviousMass " + previousMass;
+		return super.toString() + " ; PreviousMass " + previousMass;
 	}
 
 	public boolean equals(Object otherState)

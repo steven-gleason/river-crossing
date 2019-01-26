@@ -5,7 +5,7 @@ public class Raft extends Passenger
 
 	public Raft()
 	{
-		super("raft");
+		super("...R...");
 	}
 
 	public boolean isRaft()
