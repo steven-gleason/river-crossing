@@ -43,9 +43,22 @@ public class RiverCrossing
 
 	public void printSolution()
 	{
+		State previousState = null;
+		int moveCount = 1;
+
 		for (Node state : shortestPath)
 		{
-			System.out.println(state);
+			if (previousState == null)
+			{
+				System.out.println("Initial State: " + state);
+			}
+			else
+			{
+				String move = ((State) state).diffWithoutRaft(previousState);
+				System.out.println("Move " + moveCount++ + ": " + move);
+				System.out.println(" State: " + state);
+			}
+			previousState = (State) state;
 		}
 	}
 

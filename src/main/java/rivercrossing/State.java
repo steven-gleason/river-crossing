@@ -31,7 +31,7 @@ public class State extends Node
 
 	public boolean isSink()
 	{
-		for (Passenger passenger : passengerList)
+		for (Passenger passenger : getPassengers())
 		{
 			if (!passenger.hasCrossed())
 			{
@@ -87,7 +87,7 @@ public class State extends Node
 			newPassengerList.add(passenger.clone());
 		}
 
-		newState.passengerList = newPassengerList;
+		newState.setPassengers(newPassengerList);
 		return newState;
 	}
 
@@ -101,17 +101,72 @@ public class State extends Node
 
 	public String toString()
 	{
-		return toString(passengerList) + "Dist: " + getDistanceFromSink() + "; ";
+		return toString(getPassengers()) + "Dist: " + getDistanceFromSink() + "; ";
 	}
 
-	public static String toString(List<Passenger> passengerList)
+	public static String toString(List<Passenger> passengers)
 	{
 		String result = "";
-		for (Passenger p : passengerList)
+		for (Passenger p : passengers)
 		{
 			result += p.getName() + " " + (p.hasCrossed() ? "R" : "L") + "; ";
 		}
 		return result;
+	}
+
+	/**
+	 * @throws IllegalArgumentException if previousState doesn't contain the same Passengers
+	 **/
+	public String diff(State previousState)
+	{
+		List<Passenger> passengers = diffList(previousState);
+		String result = "";
+		for (Passenger p : passengers)
+		{
+			result += p.getName() + "; ";
+		}
+		return result;
+	}
+
+	/**
+	 * @throws IllegalArgumentException if previousState doesn't contain the same Passengers
+	 **/
+	public String diffWithoutRaft(State previousState)
+	{
+		List<Passenger> passengers = diffList(previousState);
+		String result = "";
+		for (Passenger p : passengers)
+		{
+			if (!p.isRaft())
+			{
+				result += p.getName() + "; ";
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * @throws IllegalArgumentException if previousState doesn't contain the same Passengers
+	 **/
+	public List<Passenger> diffList(State previousState)
+	{
+		if (getPassengers().size() != previousState.getPassengers().size())
+		{
+			throw new IllegalArgumentException("different number of passengers");
+		}
+
+		List<Passenger> moved = new ArrayList<>(getPassengers().size());
+
+		for (Passenger ghost : previousState.getPassengers())
+		{
+			Passenger present = getPassenger(ghost.getName());
+			if (present.hasCrossed() != ghost.hasCrossed())
+			{
+				moved.add(present);
+			}
+		}
+
+		return moved;
 	}
 
 	public int hashCode()
@@ -127,7 +182,7 @@ public class State extends Node
 		}
 
 		return otherState != null
-			&& statesMatch(this.passengerList, ((State)otherState).getPassengers());
+			&& statesMatch(getPassengers(), ((State)otherState).getPassengers());
 	}
 
 	private boolean statesMatch(List<Passenger> stateA, List<Passenger> stateB)
