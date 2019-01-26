@@ -3,6 +3,7 @@ package rivercrossing;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
+import java.util.ArrayList;
 import org.junit.Test;
 import rivercrossing.wolfGoatCabbage.WolfGoatCabbageCrossing;
 
@@ -56,5 +57,39 @@ public class StateTest
 		assertEquals(diff.size(), ffid.size());
 		assertEquals(diff.get(0).getName(), ffid.get(0).getName());
 		assertEquals(diff.get(1).getName(), ffid.get(1).getName());
+	}
+
+	@Test
+	public void testToStringInitial()
+	{
+		Passenger alice = new Passenger("Alice");
+		Passenger bob = new Passenger("Bob");
+		Raft raft = new Raft();
+		List<Passenger> passengers = new ArrayList<>();
+		passengers.add(raft);
+		passengers.add(alice);
+		passengers.add(bob);
+
+		String result = State.toString(passengers);
+
+		assertEquals("raft L; Alice L; Bob L; ", result);
+	}
+
+	@Test
+	public void testToStringMoved()
+	{
+		Passenger alice = new Passenger("Alice");
+		Passenger bob = new Passenger("Bob");
+		Raft raft = new Raft();
+		List<Passenger> passengers = new ArrayList<>();
+		passengers.add(raft);
+		passengers.add(alice);
+		passengers.add(bob);
+		bob.cross();
+		raft.cross();
+
+		String result = State.toString(passengers);
+
+		assertEquals("raft R; Alice L; Bob R; ", result);
 	}
 }
