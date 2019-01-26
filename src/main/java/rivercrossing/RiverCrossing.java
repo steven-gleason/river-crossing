@@ -1,7 +1,7 @@
 package rivercrossing;
 
 import graph.Node;
-import graph.PathFinder;
+import graph.pathFinder.PathFinder;
 import java.util.List;
 
 public class RiverCrossing
@@ -46,19 +46,20 @@ public class RiverCrossing
 		State previousState = null;
 		int moveCount = 1;
 
-		for (Node state : shortestPath)
+		for (Node node : shortestPath)
 		{
+			State state = (State) node;
 			if (previousState == null)
 			{
 				System.out.println("Initial State:");
 			}
 			else
 			{
-				String move = ((State) state).diffWithoutRaft(previousState);
+				String move = state.diffWithoutRaft(previousState);
 				System.out.println("Move " + moveCount++ + ": " + move);
 			}
 			System.out.println("* " + state);
-			previousState = (State) state;
+			previousState = state;
 		}
 	}
 

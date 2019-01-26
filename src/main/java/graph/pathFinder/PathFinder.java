@@ -1,5 +1,6 @@
-package graph;
+package graph.pathFinder;
 
+import graph.Node;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,24 +8,24 @@ import java.util.Stack;
 
 public class PathFinder
 {
-	protected Node startNode;
-	protected Stack<Node> currentPath;
-	protected Map<Node, Node> nodeCache;
+	protected PathFinderNode startNode;
+	protected Stack<PathFinderNode> currentPath;
+	protected Map<Node, PathFinderNode> nodeCache;
 
 	public PathFinder(Node startNode)
 	{
-		this.startNode = startNode;
-		nodeCache = new HashMap();
+		this.startNode = new PathFinderNode(startNode);
+		nodeCache = new HashMap<>();
 	}
 
 	public Stack<Node> findShortestPath()
 	{
-		currentPath = new Stack();
+		currentPath = new Stack<>();
 		continueFindingShortestPath(startNode);
 		return pathAsStack();
 	}
 
-	private void continueFindingShortestPath(Node nextNode)
+	private void continueFindingShortestPath(PathFinderNode nextNode)
 	{
 		if (hasAKnownPath(nextNode))
 		{
@@ -36,18 +37,18 @@ public class PathFinder
 		}
 	}
 
-	private void exploreChildren(Node nextNode)
+	private void exploreChildren(PathFinderNode nextNode)
 	{
 		currentPath.push(nextNode);
 		for (Node child : nextNode)
 		{
-			Node persistentNode = cacheNode(child);
+			PathFinderNode persistentNode = cacheNode(child);
 			continueFindingShortestPath(persistentNode);
 		}
 		currentPath.pop();
 	}
 
-	private boolean hasAKnownPath(Node nextNode)
+	private boolean hasAKnownPath(PathFinderNode nextNode)
 	{
 		if (nextNode.getDistanceFromSink() != null)
 		{
@@ -56,7 +57,7 @@ public class PathFinder
 		return nextNode.isSink() || nextNode.getDistanceFromSink() != null;
 	}
 
-	private void evaluatePath(Node nextNode)
+	private void evaluatePath(PathFinderNode nextNode)
 	{
 		if (nextNode.isSink())
 		{
@@ -73,9 +74,9 @@ public class PathFinder
 
 	private void reDistancePath()
 	{
-		Stack<Node> reversePath = new Stack();
+		Stack<PathFinderNode> reversePath = new Stack();
 
-		Node node = currentPath.pop();
+		PathFinderNode node = currentPath.pop();
 		reversePath.push(node);
 
 		while (!currentPath.empty())
@@ -100,7 +101,7 @@ public class PathFinder
 		}
 	}
 
-	private boolean nodeIsCloser(Node nextNode)
+	private boolean nodeIsCloser(PathFinderNode nextNode)
 	{
 		Integer nextDistance = nextNode.getDistanceFromSink();
 		Integer currentDistance;
@@ -118,7 +119,7 @@ public class PathFinder
 					|| currentDistance > nextDistance + 1);
 	}
 
-	private Node getCurrentNode()
+	private PathFinderNode getCurrentNode()
 	{
 		return currentPath.peek();
 	}
@@ -143,19 +144,20 @@ public class PathFinder
 		return false;
 	}
 
-	private Node cacheNode(Node newNode)
+	private PathFinderNode cacheNode(Node keyNode)
 	{
-		if (nodeCache.containsKey(newNode))
+		PathFinderNode cachedNode = nodeCache.get(keyNode);
+		if (cachedNode != null)
 		{
-			//System.out.println("TRACE: cached node " + nodeCache.get(newNode));
-			return nodeCache.get(newNode);
+			//System.out.println("TRACE: cached node " + nodeCache.get(keyNode));
 		}
 		else
 		{
-			//System.out.println("TRACE: not cached " + newNode);
-			nodeCache.put(newNode, newNode);
-			return newNode;
+			//System.out.println("TRACE: not cached " + keyNode);
+			cachedNode = new PathFinderNode(keyNode);
+			nodeCache.put(keyNode, cachedNode);
 		}
+		return cachedNode;
 	}
 
 	private Stack<Node> pathAsStack()
@@ -165,11 +167,11 @@ public class PathFinder
 		return path;
 	}
 
-	private void buildPath(Node currentNode, Stack<Node> path)
+	private void buildPath(PathFinderNode currentNode, Stack<Node> path)
 	{
 		if (currentNode != null)
 		{
-			path.push(currentNode);
+			path.push(currentNode.getUnderlyingNode());
 			buildPath(currentNode.getNextNode(), path);
 		}
 	}

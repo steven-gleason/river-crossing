@@ -34,4 +34,12 @@ public class RiverCrossingTest
 		testSubject.solve();
 		assertEquals(15, testSubject.getPathLength());
 	}
+
+	@Test
+	public void testPrintResultsNoException()
+	{
+		testSubject = new RiverCrossing(WolfGoatCabbageCrossing.class);
+		testSubject.solve();
+		testSubject.printSolution();
+	}
 }
