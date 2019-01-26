@@ -51,7 +51,7 @@ public class PathFinder
 	{
 		if (nextNode.getDistanceFromSink() != null)
 		{
-			System.out.println("DEBUG: known path: " + nextNode.getDistanceFromSink());
+			//System.out.println("DEBUG: known path: " + nextNode.getDistanceFromSink());
 		}
 		return nextNode.isSink() || nextNode.getDistanceFromSink() != null;
 	}
@@ -89,7 +89,7 @@ public class PathFinder
 			}
 			else
 			{
-				System.out.println("DEBUG: reDistance already contains shorter path");
+				//System.out.println("DEBUG: reDistance already contains shorter path");
 				break;
 			}
 		}
@@ -135,7 +135,7 @@ public class PathFinder
 		{
 			if (node.equals(nextNode))
 			{
-				System.out.println("DEBUG: looped");
+				//System.out.println("DEBUG: looped");
 				return true;
 			}
 		}
@@ -147,12 +147,12 @@ public class PathFinder
 	{
 		if (nodeCache.containsKey(newNode))
 		{
-			System.out.println("TRACE: cached node " + nodeCache.get(newNode));
+			//System.out.println("TRACE: cached node " + nodeCache.get(newNode));
 			return nodeCache.get(newNode);
 		}
 		else
 		{
-			System.out.println("TRACE: not cached " + newNode);
+			//System.out.println("TRACE: not cached " + newNode);
 			nodeCache.put(newNode, newNode);
 			return newNode;
 		}

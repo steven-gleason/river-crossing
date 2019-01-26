@@ -49,14 +49,14 @@ public class WolfGoatCabbageCrossing extends Rules
 		if (wolf.hasCrossed() == goat.hasCrossed()
 			 && wolf.hasCrossed()	!= farmer.hasCrossed())
 		{
-			System.out.println("bank invalid: farmer left wolf with goat");
+			//System.out.println("bank invalid: farmer left wolf with goat");
 			return false;
 		}
 
 		if (goat.hasCrossed() == cabbage.hasCrossed()
 			 && goat.hasCrossed()	!= farmer.hasCrossed())
 		{
-			System.out.println("bank invalid: farmer left goat with cabbage");
+			//System.out.println("bank invalid: farmer left goat with cabbage");
 			return false;
 		}
 
@@ -72,7 +72,7 @@ public class WolfGoatCabbageCrossing extends Rules
 				return true;
 			}
 		}
-		System.out.println("raft invalid: no farmer");
+		//System.out.println("raft invalid: no farmer");
 		return false;
 	}
 

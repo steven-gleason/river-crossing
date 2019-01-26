@@ -63,7 +63,7 @@ public abstract class Rules implements Iterator<Node>
 	**/
 	protected void findNext()
 	{
-		System.out.println("nm: " + currentState);
+		//System.out.println("nm: " + currentState);
 
 		// finish using p1
 		while (p2Iterator != null && p2Iterator.hasNext())
@@ -134,20 +134,20 @@ public abstract class Rules implements Iterator<Node>
 
 	private State tryMove(List<Passenger> loadedRaft)
 	{
-		System.out.println("try: " + State.toString(loadedRaft));
+		//System.out.println("try: " + State.toString(loadedRaft));
 		State newState = null;
 		if (isValidRaft(loadedRaft))
 		{
-			System.out.println("raft: valid");
+			//System.out.println("raft: valid");
 			newState = cross(loadedRaft);
 			if (banksAreValid(newState))
 			{
-				System.out.println("banks: valid");
+				//System.out.println("banks: valid");
 			}
 			else
 			{
-				System.out.println("invalid move");
-				System.out.println("state: " + currentState);
+				//System.out.println("invalid move");
+				//System.out.println("state: " + currentState);
 				newState = null;
 			}
 		}
