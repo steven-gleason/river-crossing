@@ -72,7 +72,7 @@ public class StateTest
 
 		String result = State.toString(passengers);
 
-		assertEquals("Alice Bob ...R...  /~~~/", result);
+		assertEquals("Alice Bob ...R...  /~~~/                    ", result);
 	}
 
 	@Test
@@ -90,6 +90,6 @@ public class StateTest
 
 		String result = State.toString(passengers);
 
-		assertEquals("Alice  /~~~/  ...R... Bob", result);
+		assertEquals("Alice              /~~~/  ...R...       Bob ", result);
 	}
 }

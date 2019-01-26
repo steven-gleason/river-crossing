@@ -120,31 +120,47 @@ public class State extends Node
 			else
 			{
 				// add to left or right string
+				String name = p.getName();
 				if (p.hasCrossed())
 				{
-					rightSide += p.getName() + " ";
+					leftSide += spaces(name.length() + 1);
+					rightSide += name + " ";
 				}
 				else
 				{
-					leftSide += p.getName() + " ";
+					leftSide += name + " ";
+					rightSide += spaces(name.length() + 1);
 				}
 			}
 		}
 
 		// add the raft to the appropriate side
+		String raftName = raft.getName();
 		if (raft.hasCrossed())
 		{
-			rightSide = raft.getName() + " " + rightSide;
+			leftSide += spaces(raftName.length());
+			rightSide = raftName + " " + rightSide;
 		}
 		else
 		{
-			leftSide += raft.getName();
+			leftSide += raftName;
+			rightSide = spaces(raftName.length() + 1) + rightSide;
 		}
 
 		// put it all together
-		String result = leftSide.trim() + "  /~~~/  " + rightSide.trim();
+		String result = leftSide + "  /~~~/  " + rightSide;
 
-		return result.trim();
+		return result;
+	}
+
+	private static String spaces(int n)
+	{
+		String result = "";
+		for (int i=0; i < n; ++i)
+		{
+			result += " ";
+		}
+		return result;
 	}
 
 	/**

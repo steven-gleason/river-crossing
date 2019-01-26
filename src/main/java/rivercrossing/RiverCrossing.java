@@ -50,14 +50,14 @@ public class RiverCrossing
 		{
 			if (previousState == null)
 			{
-				System.out.println("Initial State: " + state);
+				System.out.println("Initial State:");
 			}
 			else
 			{
 				String move = ((State) state).diffWithoutRaft(previousState);
 				System.out.println("Move " + moveCount++ + ": " + move);
-				System.out.println(" State: " + state);
 			}
+			System.out.println("* " + state);
 			previousState = (State) state;
 		}
 	}
