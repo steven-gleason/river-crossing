@@ -10,10 +10,10 @@ import rivercrossing.State;
 public class WolfGoatCabbageCrossing extends Rules
 {
 
-	private static final String WOLF = "wolf";
-	private static final String GOAT = "goat";
-	private static final String CABBAGE = "cabbage";
-	private static final String FARMER = "farmer";
+	private static final String WOLF = "Wolf";
+	private static final String GOAT = "Goat";
+	private static final String CABBAGE = "Cabbage";
+	private static final String FARMER = "Farmer";
 
 	public State getInitialState()
 	{

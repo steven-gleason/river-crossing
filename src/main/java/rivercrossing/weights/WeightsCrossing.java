@@ -11,10 +11,10 @@ import rivercrossing.weights.Weight;
 public class WeightsCrossing extends Rules
 {
 
-	private static final String ONE = "one";
-	private static final String TWO = "two";
-	private static final String THREE = "three";
-	private static final String FOUR = "four";
+	private static final String ONE = "1";
+	private static final String TWO = "2";
+	private static final String THREE = "3";
+	private static final String FOUR = "4";
 
 	public WeightedState getInitialState()
 	{

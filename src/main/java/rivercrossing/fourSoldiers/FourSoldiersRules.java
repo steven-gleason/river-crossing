@@ -10,10 +10,10 @@ import rivercrossing.State;
 public class FourSoldiersRules extends Rules
 {
 
-	static final String ARROGANT = "arrogant_red";
-	static final String LAZY = "lazy_green";
-	static final String BRAVE_A = "brave_A_blue";
-	static final String BRAVE_B = "brave_B_blue";
+	static final String ARROGANT = "ArrogantRed";
+	static final String LAZY = "LazyGreen";
+	static final String BRAVE_A = "BraveBlueA";
+	static final String BRAVE_B = "BraveBlueB";
 
 	public State getInitialState()
 	{
