@@ -2,6 +2,7 @@ package rivercrossing;
 
 import rivercrossing.fourSoldiers.FourSoldiersRules;
 import rivercrossing.weights.WeightsCrossing;
+import rivercrossing.wildebeestAndLions.WildebeestAndLionsRules;
 import rivercrossing.wolfGoatCabbage.WolfGoatCabbageCrossing;
 
 public class Menu
@@ -10,6 +11,7 @@ public class Menu
 	private static final int WOLF_GOAT_CABBAGE = 1;
 	private static final int FOUR_SOLDIERS = 2;
 	private static final int GENIUS_WEIGHTS = 3;
+	private static final int WILDEBEEST_AND_LIONS = 4;
 
 	public static void main(String[] args)
 	{
@@ -46,6 +48,10 @@ public class Menu
 
 		menuText.append(GENIUS_WEIGHTS);
 		menuText.append(" - Genius Weights");
+		menuText.append("\n");
+
+		menuText.append(WILDEBEEST_AND_LIONS);
+		menuText.append(" - Wildebeest and Lions");
 		menuText.append("\n");
 
 		menuText.append("Q - Quit");
@@ -112,6 +118,10 @@ public class Menu
 
 			case GENIUS_WEIGHTS:
 				choosenRc = new RiverCrossing(WeightsCrossing.class);
+				break;
+
+			case WILDEBEEST_AND_LIONS:
+				choosenRc = new RiverCrossing(WildebeestAndLionsRules.class);
 				break;
 
 			default:
